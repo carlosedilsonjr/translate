@@ -6,6 +6,7 @@ class Translator
         require 'net/http'
         require 'openssl'
         require 'json'
+        require_relative 'config'
 
         url = URI("https://microsoft-translator-text.p.rapidapi.com/translate?to=#{final_language}&api-version=3.0")
 
@@ -16,7 +17,7 @@ class Translator
         request = Net::HTTP::Post.new(url)
         request["content-type"] = 'application/json'
         request["x-rapidapi-host"] = 'microsoft-translator-text.p.rapidapi.com'
-        request["x-rapidapi-key"] = '93f48e05e0msh536df7dccb9112ap11be70jsn09c8f0ae516e'
+        request["x-rapidapi-key"] = Config::Key
         request.body = "[\r\n    {\r\n        \"Text\": \"#{phrase}\"\r\n    }\r\n]"
 
         response = http.request(request)
@@ -25,11 +26,3 @@ class Translator
         puts translatedText
     end
 end
-
-
-t = Translator.new
-print "\nDigite a frase a ser traduzida:"
-t.phrase = gets.chomp
-print "Digite a sigla do idioma final da tradução:"
-t.final_language = gets.chomp
-t.translate
